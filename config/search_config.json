@@ -1,0 +1,36 @@
+{
+    "subreddits": {
+        "hiring": ["forhire", "slavelabour", "freelance"],
+        "ai_discussion": ["artificial", "ChatGPT", "LocalLLaMA", "MachineLearning"],
+        "startup": ["Entrepreneur", "SaaS", "startups", "AItools"]
+    },
+    "keywords": {
+        "hiring": [
+            "hire AI agent", "looking for AI agent", "need AI developer",
+            "AI automation developer", "build me an AI agent"
+        ],
+        "buying": [
+            "best AI agent tool", "AI agent service", "buy AI agent",
+            "AI agent platform", "pay for AI automation"
+        ],
+        "demand": [
+            "need automation", "AI agent for", "automate my",
+            "AI workflow", "AI agent use case", "who uses AI agents"
+        ]
+    },
+    "filters": {
+        "min_upvotes": 5,
+        "min_comments": 3,
+        "max_posts": 1000,
+        "months_back": 6,
+        "top_comments_limit": 20
+    },
+    "scraping": {
+        "delay_min_seconds": 2,
+        "delay_max_seconds": 5,
+        "max_retries": 3,
+        "rate_limit_wait_seconds": 60,
+        "batch_size_analyst": 50
+    },
+    "base_url": "https://old.reddit.com"
+}

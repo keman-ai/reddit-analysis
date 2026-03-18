@@ -1,0 +1,14 @@
+# 大数据文件（保留在本地，不提交）
+data/raw/*.jsonl
+data/analyzed/*.json
+data/analyzed/*.csv
+
+# 保留目录结构
+!data/raw/.gitkeep
+!data/analyzed/.gitkeep
+!data/reports/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
