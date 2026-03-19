@@ -217,15 +217,29 @@ def main():
     print(f"Total remaining tasks: {len(tasks)}")
 
     rate_limit_count = 0
+    consecutive_empty = 0  # Track consecutive zero-new-post combos per subreddit
+    current_sub = None
 
     for i, (sub_group, sub, kw_group, keyword, task_key) in enumerate(tasks):
+        # Reset counter when switching subreddit
+        if sub != current_sub:
+            current_sub = sub
+            consecutive_empty = 0
+
+        # Skip rest of subreddit if 5 consecutive keywords returned 0 new posts
+        if consecutive_empty >= 5:
+            print(f"[{i+1}/{len(tasks)}] r/{sub} \"{keyword}\" ({kw_group})... SKIP (5 consecutive empty)")
+            progress['completed'].append(task_key)
+            save_progress(progress)
+            continue
+
         print(f"[{i+1}/{len(tasks)}] r/{sub} \"{keyword}\" ({kw_group})...", end=' ', flush=True)
 
-        # Fetch up to 5 pages
+        # Fetch up to 3 pages (reduced from 5 for speed)
         page_after = None
         combo_posts = 0
 
-        for page in range(5):
+        for page in range(3):
             data = fetch_reddit_search(sub, keyword, after=page_after)
 
             if 'error' in data:
@@ -279,18 +293,19 @@ def main():
 
         print(f"{combo_posts} posts ({page+1} pages)")
 
+        # Track consecutive empty for early skip
+        if combo_posts == 0:
+            consecutive_empty += 1
+        else:
+            consecutive_empty = 0
+
         # Mark completed
         progress['completed'].append(task_key)
         progress['total_posts'] = len(existing_ids)
         save_progress(progress)
 
-        # Delay between searches
-        time.sleep(random.uniform(2, 5))
-
-        # Check if we've hit target
-        if len(existing_ids) >= 10000:
-            print(f"\n=== TARGET REACHED: {len(existing_ids)} posts ===")
-            break
+        # Shorter delay
+        time.sleep(random.uniform(1, 3))
 
     print(f"\nDone! Total new posts saved: {total_new}")
     print(f"Total unique posts: {len(existing_ids)}")
