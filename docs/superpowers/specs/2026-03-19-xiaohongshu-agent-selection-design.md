@@ -64,6 +64,12 @@
 - `有偿` 文件全部保留
 - 其他文件按规则 1+2 过滤
 
+规则 4 — 排除规则（命中即排除）：
+- 线下/实物服务：搬家、维修、安装、配送、上门、家政、保洁
+- 医疗/法律敏感：就医、律师、法律咨询、诊断、处方
+- 纯商品交易：二手、闲置、转让、出售实物
+- 情感/社交：找对象、相亲、脱单、表白
+
 粗筛后如数量偏离 3-5K 目标，动态调整关键词宽严度。
 
 ### Stage 3: LLM 批量打标
@@ -74,18 +80,37 @@
 每条记录新增打标字段：
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| `service_category` | string | 服务品类（LLM 自由归类） |
+| `service_category` | string | 服务品类（从种子列表选择，必要时新增） |
 | `standardization_score` | 1-5 | 标准化程度：5=完全模板化，1=高度个性化 |
 | `digital_delivery` | bool | 交付物是否为纯数字化产物 |
 | `ai_replaceability` | 1-5 | AI Agent 可替代度 |
 | `demand_type` | enum | buying/selling/recommending/discussing |
 | `confidence` | 1-5 | LLM 置信度 |
 
+**种子品类列表（LLM 优先从此列表选择，不匹配时可新增）：**
+PPT制作、简历优化、论文润色、文案撰写、翻译、公文写作、报告撰写、
+Logo设计、海报设计、头像制作、封面设计、修图/P图、UI设计、
+网站开发、小程序开发、数据分析、Excel处理、爬虫/数据采集、代码开发、
+AI工具咨询、AI绘画、AI视频、
+取名/命名、占卜/塔罗、心理咨询、教育辅导、职业规划
+
+**模型与成本：**
+- 使用 Claude Haiku（成本最低，分类任务足够）
+- 预估：3-5K 条 / 50 条每批 = 60-100 次 API 调用
+- 每批约 3K tokens 输入 + 2K tokens 输出 = 5K tokens/批
+- 总计约 500K tokens，Haiku 成本可忽略
+
 **处理策略：**
-- 每批 50 条（标题 + 内容截断前 200 字）
+- 每批 50 条（标题 + 内容截断前 300 字）
 - 返回 JSON 数组
-- 断点续做（progress.json）
-- confidence < 3 标记为待复核
+- 断点续做（labeling_progress.json 记录已处理的 record ID 集合）
+- confidence < 3 标记为待复核，从最终评分中排除但保留在数据中
+- 先跑 1 批（50 条）样本，人工检查打标质量后再全量执行
+
+**LLM 输出校验：**
+- JSON schema 校验：standardization_score/ai_replaceability 必须为 1-5 整数，demand_type 必须为枚举值之一，digital_delivery 必须为布尔
+- 校验失败的批次自动重试（最多 2 次），仍失败则跳过并记录到 errors.log
+- 未在种子列表中的新品类记录到 new_categories.json，供归一化阶段审查
 
 ### Stage 4: 统计聚合与选品报告
 
@@ -109,13 +134,13 @@ LLM 自由标签聚类归一，输出 `category_mapping.json`
 ```
 选品得分 = ai_replaceability × 0.35 + standardization × 0.25 + demand_heat × 0.2 + engagement × 0.1 + digital_ratio × 0.1
 ```
-- demand_heat 和 engagement 归一化到 1-5
+- demand_heat 和 engagement 使用 log 归一化到 1-5（避免长尾分布压缩大部分品类到低分段）
 - 输出 `data/analyzed/xiaohongshu/category_ranking.json`
 
 **Step 4 — 生成报告：**
 - Top 20 品类排名
 - 每个品类的典型帖子示例
-- 与闲鱼数据交叉对比
+- 与闲鱼数据交叉对比（见下方交叉验证方法论）
 - 最终推荐 Top 10 选品及理由
 - 输出 `data/reports/xiaohongshu_agent_selection_report.md`
 
@@ -145,6 +170,23 @@ data/
 3. **需求热度**（0.20）— 小红书上讨论/求助量
 4. **用户关注度**（0.10）— 互动量反映的关注强度
 5. **数字化比例**（0.10）— 是否纯线上交付
+
+## 交叉验证方法论
+
+### 小红书 × 闲鱼品类映射
+小红书品类（种子列表）与闲鱼品类（10 大类）的映射关系：
+| 小红书品类 | 闲鱼品类 | 对比指标 |
+|-----------|----------|---------|
+| PPT制作/简历优化/论文润色/文案撰写/报告撰写/公文写作 | writing (15.2%) | 闲鱼 listings 数、median price、want count |
+| Logo设计/海报设计/头像制作/封面设计/修图P图/UI设计 | design (23.7%) | 同上 |
+| 翻译 | translation (16%) | 同上 |
+| 网站开发/小程序开发/代码开发/爬虫数据采集/数据分析/Excel处理 | programming (17.1%) | 同上 |
+| AI工具咨询/AI绘画/AI视频 | AI-related (14.5%) | 同上 |
+
+### 验证逻辑
+- **高置信选品：** 小红书需求 Top-10 且闲鱼有对应供给和销量的品类
+- **隐性需求：** 小红书需求高但闲鱼供给少 → 供给缺口，优先切入机会
+- **虚火品类：** 小红书讨论热但闲鱼无付费验证 → 降权处理
 
 ## 与已有数据的关系
 
