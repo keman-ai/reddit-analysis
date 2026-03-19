@@ -1,0 +1,53 @@
+{
+    "subreddits": {
+        "hiring": ["forhire", "slavelabour", "freelance", "remotejs", "WorkOnline", "digitalnomad"],
+        "ai_discussion": ["artificial", "ChatGPT", "LocalLLaMA", "MachineLearning", "OpenAI", "ClaudeAI", "singularity", "ArtificialIntelligence", "GPT", "LLMDevs"],
+        "startup": ["Entrepreneur", "SaaS", "startups", "smallbusiness", "indiehackers", "microsaas"],
+        "automation": ["AutomateYourself", "n8n", "nocode", "lowcode", "zapier", "workflowautomation"],
+        "industry": ["webdev", "devops", "dataengineering", "datascience", "customerservice", "marketing", "realestate", "legaltech"]
+    },
+    "keywords": {
+        "hiring": [
+            "hire AI agent", "looking for AI agent", "need AI developer",
+            "AI automation developer", "build me an AI agent",
+            "hiring AI engineer", "looking for AI automation",
+            "need someone to build AI", "AI freelancer",
+            "contract AI developer"
+        ],
+        "buying": [
+            "best AI agent tool", "AI agent service", "buy AI agent",
+            "AI agent platform", "pay for AI automation",
+            "AI agent software", "AI agent pricing",
+            "recommend AI agent", "AI tool for business",
+            "which AI agent should I use"
+        ],
+        "demand": [
+            "need automation", "AI agent for", "automate my",
+            "AI workflow", "AI agent use case", "who uses AI agents",
+            "AI agent", "AI bot", "AI assistant for work",
+            "automate business", "AI replace", "AI taking over",
+            "AI in production", "deploy AI agent", "building AI agent"
+        ],
+        "tools": [
+            "n8n AI", "make.com AI", "zapier AI",
+            "langchain agent", "crewai", "autogpt",
+            "claude agent", "openai agent", "AI workflow tool"
+        ]
+    },
+    "filters": {
+        "min_upvotes": 1,
+        "min_comments": 1,
+        "max_posts": 10000,
+        "months_back": 6,
+        "top_comments_limit": 10,
+        "max_pages_per_search": 5
+    },
+    "scraping": {
+        "delay_min_seconds": 5,
+        "delay_max_seconds": 10,
+        "max_retries": 3,
+        "rate_limit_wait_seconds": 120,
+        "batch_size_analyst": 50
+    },
+    "base_url": "https://old.reddit.com"
+}
