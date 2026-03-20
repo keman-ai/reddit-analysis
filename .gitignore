@@ -1,14 +1,24 @@
-# 大数据文件（保留在本地，不提交）
-data/raw/*.jsonl
-data/analyzed/*.json
-data/analyzed/*.csv
+# 数据目录（体积大，不提交到远程）
+data/raw/
+data/analyzed/
+data/reports/
 
 # 保留目录结构
 !data/raw/.gitkeep
 !data/analyzed/.gitkeep
 !data/reports/.gitkeep
 
+# Playwright MCP 缓存
+.playwright-mcp/
+
 # Python
 __pycache__/
 *.pyc
 .venv/
+
+# macOS
+.DS_Store
+
+# 临时文件
+*.log
+pending_tasks.json
