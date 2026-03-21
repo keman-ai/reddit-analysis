@@ -29,7 +29,7 @@
 | 9 | 法律服务 | 345 | 97 | $250-300/小时，简单问题也要付律师费 |
 | 10 | 汽车维修 | 190 | 169 | 修车店报价 $1,400，自己修只花 $92 |
 
-**关键洞察**：平均赞数反映共鸣强度。汽车维修（169）、牙科（136）、家装维修（127）的平均赞数远高于帖子数排名靠前的医疗和保险，说明这些领域的价格痛点引发了更强烈的情感共鸣。一条典型帖子——"Car broke down, mechanic quoted $1,400. $92 in parts later, all fixed"——获得 5,406 赞，浓缩了低端破坏的核心逻辑：**现有服务商收取的费用远超服务本身的成本**。
+**关键洞察**：平均赞数反映共鸣强度。汽车维修（169）、牙科（136）、家装维修（127）的平均赞数远高于帖子数排名靠前的医疗和保险，说明这些领域的价格痛点引发了更强烈的情感共鸣。一条典型帖子——["Car broke down, mechanic quoted $1,400. $92 in parts later, all fixed"](https://old.reddit.com/r/DIY/comments/1lwpxsc/car_broke_down_and_the_mechanic_quoted_1400_to/)——获得 5,406 赞，浓缩了低端破坏的核心逻辑：**现有服务商收取的费用远超服务本身的成本**。
 
 ### 价格锚点提取
 
@@ -37,13 +37,13 @@
 
 | 服务类型 | 用户感知中位价 | 典型单位 | 痛感描述 |
 |----------|--------------|---------|---------|
-| 心理咨询 | $150/次 | /session | "affordable mental health resources I found after refusing to pay $175/hour" (1,006↑) |
+| 心理咨询 | $150/次 | /session | ["affordable mental health resources I found after refusing to pay $175/hour"](https://old.reddit.com/r/Frugal/comments/1rjfkrr/affordable_mental_health_resources_i_found_after/) (1,006↑) |
 | 财税服务 | $100/次 | 一次性 | 简单报税被收数百美元 |
 | 法律服务 | $250/次 | 一次性 | 简单法律问题也要付咨询费 |
-| 理财顾问 | $150/次 | 一次性 | "financial advisor sold me whole life insurance, now I regret it" (671↑) |
+| 理财顾问 | $150/次 | 一次性 | ["I was sold on whole life insurance and now I regret it"](https://old.reddit.com/r/personalfinance/comments/1mxm96x/i_was_sold_on_whole_life_insurance_and_now_i/) (671↑) |
 | 汽车维修 | $700/次 | 一次性 | 零件成本与人工费用严重倒挂 |
 | 牙科服务 | $360/次 | 一次性 | 补牙数百、根管数千 |
-| 家装维修 | $270/次 | 项目 | "lost all respect for local contractors" (39,622↑，全数据集第 4 高赞) |
+| 家装维修 | $270/次 | 项目 | ["4 months ago I lost all respect for local contractors"](https://old.reddit.com/r/DIY/comments/1nvc72e/4_months_ago_i_lost_all_respect_for_local/) (39,622↑，全数据集第 4 高赞) |
 
 ---
 
@@ -62,7 +62,7 @@
 | 7 | 房地产中介 | 338 | 81 | 首次购房者完全不懂流程 |
 | 8 | 牙科服务 | 314 | 58 | 多年没看过牙医、害怕费用 |
 
-**关键洞察**：法律服务的新市场信号平均赞数（112）在所有类别中最高。帖子"Being honest about being pulled over? Why is that the worst thing to do?"获得 13,164 赞——一个普通人不理解最基本的法律常识，而他的困惑引起了上万人共鸣。这正是非消费者的典型特征：**不是不需要法律知识，而是法律服务的门槛高到连"我需要律师"这个判断本身都做不出来**。
+**关键洞察**：法律服务的新市场信号平均赞数（112）在所有类别中最高。帖子["Being honest about being pulled over? Why is that the worst thing to do?"](https://old.reddit.com/r/NoStupidQuestions/comments/1pbvev8/being_honest_about_being_pulled_over_why_is_that/)获得 13,164 赞——一个普通人不理解最基本的法律常识，而他的困惑引起了上万人共鸣。这正是非消费者的典型特征：**不是不需要法律知识，而是法律服务的门槛高到连"我需要律师"这个判断本身都做不出来**。
 
 ### "Should I Hire" 分析
 
@@ -144,7 +144,7 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **破坏类型**：双重破坏
 
-**数据支撑**：低端信号 744 条，新市场信号 742 条，纠结信号 161 条（在所有服务中纠结比例最高之一）。帖子 "I do all the bookkeeping so why do I need an accountant?"（280↑）精准捕获了低端破坏的窗口。
+**数据支撑**：低端信号 744 条，新市场信号 742 条，纠结信号 161 条（在所有服务中纠结比例最高之一）。帖子 ["I do all the bookkeeping so why do I need an accountant?"](https://old.reddit.com/r/Accounting/comments/1nufpn0/i_do_all_the_bookkeeping_so_why_do_i_need_an/)（280↑）精准捕获了低端破坏的窗口。
 
 **现有服务痛点**：简单 W-2 报税收费 $100-300；中等复杂度（自雇、投资收入）$300-500。用户觉得"我只是填几个数字，为什么要付这么多？" Reddit 数据显示财税服务的 r/Accounting 帖子（2,131 条）中大量是行业从业者自己在抱怨行业内卷。
 
@@ -170,7 +170,7 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **Agent 方案**：40% 专业质量（无法做诊断和处方），但 100% 可及性。Agent 可以提供 CBT 认知行为疗法引导、情绪日记追踪、正念冥想指导、危机时刻的安抚和资源转介。关键是 7x24 小时可用——很多心理危机发生在凌晨 3 点。
 
-**非消费者画像**："Just got fired and I haven't been able to leave my car for the past two hours"（4,987↑）——这位用户需要的不是专业心理治疗，而是有人在那一刻帮他理清情绪。目前这类人的方案是"发 Reddit 帖子求助"。
+**非消费者画像**：["Just got fired and I haven't been able to leave my car for the past two hours"](https://old.reddit.com/r/povertyfinance/comments/1ofb6n3/just_got_fired_and_i_havent_been_able_to_leave_my/)（4,987↑）——这位用户需要的不是专业心理治疗，而是有人在那一刻帮他理清情绪。目前这类人的方案是"发 Reddit 帖子求助"。
 
 **类比**：像 Calm/Headspace 之于心理治疗师的进化——从被动的冥想音频变成主动对话的情感陪伴。
 
@@ -184,7 +184,7 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **破坏类型**：双重破坏
 
-**数据支撑**：低端信号 345 条，新市场信号 340 条（avg 112↑，全类别最高共鸣度），纠结信号 50 条。帖子 "I inherited a house with 0% interest, so why can't I change it to my name?"（2,940↑）——用户面对简单的遗产过户问题束手无策。"Elderly mother can't pay bills... she can't afford the legal fees to file bankruptcy"（1,047↑）——连申请破产都付不起律师费。
+**数据支撑**：低端信号 345 条，新市场信号 340 条（avg 112↑，全类别最高共鸣度），纠结信号 50 条。帖子 ["I inherited a house with 0% interest, so why can't I change it to my name?"](https://old.reddit.com/r/personalfinance/comments/1n2vagn/i_inherited_a_house_with_0_interest_so_why_cant_i/)（2,940↑）——用户面对简单的遗产过户问题束手无策。["Elderly mother can't pay bills"](https://old.reddit.com/r/personalfinance/comments/1ruezml/elderly_mother_cant_pay_bills/)（1,047↑）——连申请破产都付不起律师费——连申请破产都付不起律师费。
 
 **现有服务痛点**：律师 $250-500/hr，简单咨询 30 分钟就要 $150+。大量法律问题其实是"告诉我我有什么权利"和"帮我理解这份合同"。
 
@@ -204,7 +204,7 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **破坏类型**：双重破坏（最高破坏比率之一）
 
-**数据支撑**：低端信号 109 条，新市场信号 79 条，纠结信号 34 条。帖子 "My girlfriend (27) has $70k sitting in cash and no investments"（2,857↑）——这是最典型的非消费者：有钱但不知道怎么投资的年轻人。"I was sold on whole life insurance and now I regret it"（671↑）——被过度服务的典型案例。
+**数据支撑**：低端信号 109 条，新市场信号 79 条，纠结信号 34 条。帖子 ["My girlfriend (27) has $70k sitting in cash and no investments"](https://old.reddit.com/r/personalfinance/comments/1rx7hv0/my_girlfriend_27_has_70k_sitting_in_cash_and_no/)（2,857↑）——这是最典型的非消费者：有钱但不知道怎么投资的年轻人。["I was sold on whole life insurance and now I regret it"](https://old.reddit.com/r/personalfinance/comments/1mxm96x/i_was_sold_on_whole_life_insurance_and_now_i/)（671↑）——被过度服务的典型案例。
 
 **现有服务痛点**：理财顾问通常要求最低资产门槛（$100K+），收取 AUM 1% 或 $200/session。大量普通人的理财需求其实很简单：该存多少、该投什么 index fund、该不该提前还贷。
 
@@ -224,7 +224,7 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **破坏类型**：低端破坏为主
 
-**数据支撑**：低端信号 1,407 条（仅次于医疗），新市场信号 806 条。r/HealthInsurance（1,058 条）和 r/Insurance（865 条）是核心场景。帖子 "Mark Cuban Says The Real Health Insurance 'Scam' Is Rising Deductibles"（11,499↑）引发了关于保险行业定价不透明的全网讨论。"My health insurance premium will go from $24 to $213 next year!!"（1,450↑）——用户对保费暴涨完全无能为力。
+**数据支撑**：低端信号 1,407 条（仅次于医疗），新市场信号 806 条。r/HealthInsurance（1,058 条）和 r/Insurance（865 条）是核心场景。帖子 ["Mark Cuban Says The Real Health Insurance 'Scam' Is Rising Deductibles"](https://old.reddit.com/r/povertyfinance/comments/1mvl05t/mark_cuban_says_the_real_health_insurance_scam_is/)（11,499↑）引发了关于保险行业定价不透明的全网讨论。["My health insurance premium will go from $24 to $213 next year!!"](https://old.reddit.com/r/Insurance/comments/1ok7q3a/my_health_insurance_premium_will_go_from_2422_to/)（1,450↑）——用户对保费暴涨完全无能为力。
 
 **现有服务痛点**：保险条款极其复杂，保险经纪人有利益冲突（推荐佣金高的产品），消费者无法做真正的同类比较。
 
@@ -240,13 +240,13 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **破坏类型**：双重破坏
 
-**数据支撑**：低端信号 793 条（avg 127↑），新市场信号 572 条（avg 86↑）。全数据集第 4 高赞帖："4 months ago I lost all respect for local contractors. 4 months later I've gained a ton for myself"（39,622↑）——用户自己动手完成了承包商报价过高的项目。r/DIY（466 条）+ r/HomeImprovement（261 条）= 727 条 DIY 社区帖子。
+**数据支撑**：低端信号 793 条（avg 127↑），新市场信号 572 条（avg 86↑）。全数据集第 4 高赞帖：["4 months ago I lost all respect for local contractors. 4 months later I've gained a ton for myself"](https://old.reddit.com/r/DIY/comments/1nvc72e/4_months_ago_i_lost_all_respect_for_local/)（39,622↑）——用户自己动手完成了承包商报价过高的项目。r/DIY（466 条）+ r/HomeImprovement（261 条）= 727 条 DIY 社区帖子。
 
 **现有服务痛点**：承包商报价不透明、质量参差不齐、小活不愿接、大活报价虚高。用户最痛的时刻是：**知道自己能干但不知道怎么开始**。
 
 **Agent 方案**：45% 质量。能做：根据照片/描述诊断问题、推荐 DIY 方案+工具清单+步骤视频、估算材料成本、判断"这个活你能自己干还是必须请专业人士"。不能做：上门施工、承担安全责任。
 
-**非消费者画像**：首次购房者、租房客（想小修小补但不敢动）、预算有限的房主。帖子 "Spent several years building a complete 1300 sq ft roundhouse from top to bottom with my wife"（12,489↑）证明了 DIY 精神的强大需求——Agent 降低的是"开始做"的门槛。
+**非消费者画像**：首次购房者、租房客（想小修小补但不敢动）、预算有限的房主。帖子 ["Spent several years building a complete 1300 sq ft roundhouse from top to bottom with my wife"](https://old.reddit.com/r/DIY/comments/1kyikmh/spent_several_years_building_a_complete_1300_sq/)（12,489↑）证明了 DIY 精神的强大需求——Agent 降低的是"开始做"的门槛。
 
 **类比**：像 YouTube DIY 教程之于承包商——但 YouTube 是通用的，Agent 是针对你家具体问题的个性化诊断。
 
@@ -258,7 +258,7 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **破坏类型**：低端破坏为主
 
-**数据支撑**：低端信号 464 条，新市场信号 338 条。r/RealEstate 贡献 930 条，帖子 "Manipulative Buyers Got Greedy and Lost a Great House"（3,103↑）暴露了中介行业的利益冲突。
+**数据支撑**：低端信号 464 条，新市场信号 338 条。r/RealEstate 贡献 930 条，帖子 ["Manipulative Buyers Got Greedy and Lost a Great House"](https://old.reddit.com/r/RealEstate/comments/1kjskaa/manipulative_buyers_got_greedy_and_lost_a_great/)（3,103↑）暴露了中介行业的利益冲突。
 
 **现有服务痛点**：6% 佣金（$30 万房子 = $18,000 佣金）与实际工作量严重不匹配。2024 年 NAR 和解后佣金结构松动，但普通消费者仍不知道如何利用新规则。
 
@@ -272,7 +272,7 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **破坏类型**：低端破坏为主
 
-**数据支撑**：低端信号 485 条，新市场信号 123 条。帖子 "I'm so sick of being a designer"（1,348↑）——设计师自己也在抱怨行业内卷，验证了低端破坏的时机成熟。
+**数据支撑**：低端信号 485 条，新市场信号 123 条。帖子 ["I'm so sick of being a designer"](https://old.reddit.com/r/graphic_design/comments/1ltt8w3/im_so_sick_of_being_a_designer/)（1,348↑）——设计师自己也在抱怨行业内卷，验证了低端破坏的时机成熟。
 
 **Agent 方案**：65% 质量。能做：Logo 生成、名片/海报设计、社交媒体图片、简单 UI 原型。生成式 AI（Midjourney、DALL-E）已经证明了可行性，Agent 加上交互式迭代（"把颜色改暖一点"、"加上公司 slogan"）是体验升级。
 
@@ -286,11 +286,11 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **破坏类型**：双重破坏
 
-**数据支撑**：低端信号 190 条（avg 169↑，共鸣度极高），新市场信号 141 条。核心帖子 "Car broke down, mechanic quoted $1,400. $92 in parts later, all fixed"（5,406↑）完美诠释了破坏逻辑。"As a learning mechanic living paycheck to paycheck... NEVER BUY A EUROPEAN CAR"（3,975↑）。
+**数据支撑**：低端信号 190 条（avg 169↑，共鸣度极高），新市场信号 141 条。核心帖子 ["Car broke down, mechanic quoted $1,400. $92 in parts later, all fixed"](https://old.reddit.com/r/DIY/comments/1lwpxsc/car_broke_down_and_the_mechanic_quoted_1400_to/)（5,406↑）完美诠释了破坏逻辑。"As a learning mechanic living paycheck to paycheck... NEVER BUY A EUROPEAN CAR"（3,975↑）。
 
 **Agent 方案**：40% 质量。能做：根据症状描述（异响类型、仪表盘故障码、漏液颜色）诊断可能的问题、估算零件成本、判断"能自己修还是必须去修车店"、推荐附近评价好的修车店。接入 OBD-II 数据后可做更精准的诊断。
 
-**非消费者画像**：不懂车的年轻人、低收入家庭（修车费是致命开支）。帖子 "It's so expensive being poor"（2,009↑）捕获了这个群体的绝望——手机坏了修不起，车坏了更修不起。
+**非消费者画像**：不懂车的年轻人、低收入家庭（修车费是致命开支）。帖子 ["It's so expensive being poor"](https://old.reddit.com/r/povertyfinance/comments/1le7g1j/its_so_expensive_being_poor/)（2,009↑）捕获了这个群体的绝望——手机坏了修不起，车坏了更修不起。
 
 **商业模式**：$5/次故障诊断，$3/次零件比价。与汽配电商合作抽佣。
 
@@ -304,7 +304,7 @@ professional_vs_diy 类别（4,213 条）直接捕获了用户在"自己做"和"
 
 **Agent 方案**：70% 质量（职业教练中最具 Agent 替代性的领域）。能做：简历优化（针对特定职位的关键词匹配）、模拟面试、薪资谈判脚本、职业路径规划、LinkedIn 简介优化。
 
-**非消费者画像**：应届毕业生、转行者、被裁员者。帖子 "Has anyone seen a cheaper alternative to 1:1 career coaching, specifically in accounting?"（3↑，但精准）。
+**非消费者画像**：应届毕业生、转行者、被裁员者。帖子 ["Has anyone seen a cheaper alternative to 1:1 career coaching, specifically in accounting?"](https://old.reddit.com/r/Accounting/comments/1psexy3/has_anyone_seen_a_cheaper_alternative_to_11/)（3↑，但精准）。
 
 **类比**：像 LinkedIn Premium 的替代——LinkedIn 收 $59/月但只提供数据，Agent 提供个性化建议。
 
