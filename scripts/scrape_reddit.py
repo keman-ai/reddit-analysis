@@ -272,9 +272,15 @@ def main():
 
     # Deduplication
     print(f"\nScraping done. Total new: {total_new} | Total: {len(existing_ids)}")
-    print("Running deduplication...")
-    deduped_count = deduplicate_jsonl(output_file, deduped_file)
-    print(f"Deduped output: {deduped_count} unique posts -> {deduped_file}")
+    if not os.path.exists(output_file) or os.path.getsize(output_file) == 0:
+        print("No data collected. Creating empty deduped file.")
+        with open(deduped_file, 'w') as f:
+            pass
+        deduped_count = 0
+    else:
+        print("Running deduplication...")
+        deduped_count = deduplicate_jsonl(output_file, deduped_file)
+        print(f"Deduped output: {deduped_count} unique posts -> {deduped_file}")
 
     # Write summary for run.py to read
     summary = {
