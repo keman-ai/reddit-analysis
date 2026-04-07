@@ -32,10 +32,15 @@ def ensure_dirs():
 
 
 def call_claude(prompt: str, timeout: int = 300) -> str:
-    """Call Claude CLI with a prompt and return the output."""
+    """Call Claude CLI with a prompt and return the output.
+
+    Uses stdin to pass the prompt to avoid shell argument length limits.
+    """
     try:
         result = subprocess.run(
-            ['claude', '--print', '--prompt', prompt],
+            ['claude', '-p', '--allowedTools', '',
+             '--system-prompt', '你是一个文本生成助手。直接输出用户要求的内容，不要使用任何工具，不要请求权限，不要输出摘要。'],
+            input=prompt,
             capture_output=True,
             text=True,
             timeout=timeout,
