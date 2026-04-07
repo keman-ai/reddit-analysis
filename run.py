@@ -41,8 +41,17 @@ def update_status(task_id: str, phase: int, phase_name: str, status: str,
     File: data/raw/{task_id}_status.json
     """
     global _status_file
+    new_path = DATA_RAW / f"{task_id}_status.json"
     if _status_file is None:
-        _status_file = DATA_RAW / f"{task_id}_status.json"
+        _status_file = new_path
+    elif _status_file != new_path:
+        # task_id changed (e.g. Phase 1 resolved the real ID) — migrate file
+        try:
+            if _status_file.exists():
+                _status_file.unlink()
+        except OSError:
+            pass
+        _status_file = new_path
 
     elapsed = time.time() - start_time if start_time else 0
     minutes = int(elapsed // 60)
