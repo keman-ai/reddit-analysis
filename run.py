@@ -24,11 +24,51 @@ DATA_ANALYZED = PROJECT_ROOT / 'data' / 'analyzed'
 DATA_REPORTS = PROJECT_ROOT / 'data' / 'reports'
 PROMPTS_DIR = PROJECT_ROOT / 'prompts'
 
+# Global reference to the current status file path, set once task_id is known
+_status_file = None
+
 
 def ensure_dirs():
     """Ensure all required directories exist."""
     for d in [DATA_RAW, DATA_ANALYZED, DATA_REPORTS]:
         d.mkdir(parents=True, exist_ok=True)
+
+
+def update_status(task_id: str, phase: int, phase_name: str, status: str,
+                  detail: str = '', start_time: float = 0, **extra):
+    """Write a JSON status file that external tools can poll for progress.
+
+    File: data/raw/{task_id}_status.json
+    """
+    global _status_file
+    if _status_file is None:
+        _status_file = DATA_RAW / f"{task_id}_status.json"
+
+    elapsed = time.time() - start_time if start_time else 0
+    minutes = int(elapsed // 60)
+    seconds = int(elapsed % 60)
+
+    payload = {
+        'task_id': task_id,
+        'current_phase': phase,
+        'phase_name': phase_name,
+        'status': status,       # running / completed / error
+        'detail': detail,
+        'elapsed': f'{minutes}m {seconds}s',
+        'elapsed_seconds': round(elapsed, 1),
+        'updated_at': datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+        'phases': {
+            1: 'Task Planning',
+            2: 'Data Scraping',
+            3: 'Quantitative Analysis',
+            4: 'Report Generation',
+        },
+    }
+    payload.update(extra)
+
+    with open(_status_file, 'w') as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+    return _status_file
 
 
 def call_claude(prompt: str, timeout: int = 300) -> str:
@@ -58,11 +98,17 @@ def call_claude(prompt: str, timeout: int = 300) -> str:
         return ""
 
 
-def phase1_plan(task_description: str, task_id: str = None) -> dict:
+def phase1_plan(task_description: str, task_id: str = None,
+                start_time: float = 0) -> dict:
     """Phase 1: Task Planning — use LLM to generate a structured search plan."""
     print("=" * 60)
     print("Phase 1: Task Planning")
     print("=" * 60)
+
+    # Preliminary task_id for status updates before LLM generates one
+    pre_id = task_id or 'pending'
+    update_status(pre_id, 1, 'Task Planning', 'running',
+                  'Calling Claude to generate search plan...', start_time)
 
     # Load prompt template
     template_path = PROMPTS_DIR / 'plan_task.md'
@@ -116,10 +162,14 @@ def phase1_plan(task_description: str, task_id: str = None) -> dict:
     print(f"  Plan saved: {plan_file}")
     print(f"  {subs} subreddits x {kws} keywords, target {target} posts")
 
+    update_status(plan['task_id'], 1, 'Task Planning', 'completed',
+                  f'{subs} subreddits x {kws} keywords, target {target} posts',
+                  start_time)
+
     return plan
 
 
-def phase2_scrape(plan: dict) -> str:
+def phase2_scrape(plan: dict, start_time: float = 0) -> str:
     """Phase 2: Data Scraping — run the unified scraper."""
     print()
     print("=" * 60)
@@ -130,6 +180,10 @@ def phase2_scrape(plan: dict) -> str:
     plan_file = DATA_RAW / f"{task_id}_plan.json"
     output_file = DATA_RAW / f"{task_id}.jsonl"
     deduped_file = DATA_RAW / f"{task_id}_deduped.jsonl"
+    progress_file = DATA_RAW / f"{task_id}_progress.json"
+
+    update_status(task_id, 2, 'Data Scraping', 'running',
+                  'Starting scraper...', start_time)
 
     # Check if deduped file already exists with sufficient data
     if deduped_file.exists():
@@ -137,6 +191,8 @@ def phase2_scrape(plan: dict) -> str:
         target = plan.get('target_posts', 5000)
         if line_count >= target * 0.5:
             print(f"  Deduped data already exists: {line_count} posts. Skipping scrape.")
+            update_status(task_id, 2, 'Data Scraping', 'completed',
+                          f'Skipped (existing data: {line_count} posts)', start_time)
             return str(deduped_file)
 
     print(f"  Running scraper...")
@@ -159,9 +215,29 @@ def phase2_scrape(plan: dict) -> str:
         cwd=str(PROJECT_ROOT),
     )
 
-    # Stream output
+    # Stream output and periodically update status from progress.json
+    last_status_update = 0
+    target = plan.get('target_posts', 5000)
     for line in iter(process.stdout.readline, ''):
         print(f"  {line}", end='')
+        # Update status every 30 seconds
+        now = time.time()
+        if now - last_status_update > 30:
+            last_status_update = now
+            try:
+                if progress_file.exists():
+                    with open(progress_file) as pf:
+                        prog = json.load(pf)
+                    collected = prog.get('total_posts', 0)
+                    completed = len(prog.get('completed', []))
+                    failed = len(prog.get('failed', []))
+                    update_status(task_id, 2, 'Data Scraping', 'running',
+                                  f'Collected {collected}/{target} posts '
+                                  f'({completed} combos done, {failed} failed)',
+                                  start_time, posts_collected=collected,
+                                  target_posts=target)
+            except Exception:
+                pass
     process.wait()
 
     if process.returncode != 0:
@@ -170,17 +246,21 @@ def phase2_scrape(plan: dict) -> str:
     # Check result
     if deduped_file.exists():
         line_count = sum(1 for line in open(deduped_file) if line.strip())
-        target = plan.get('target_posts', 5000)
         print(f"\n  Deduped data: {line_count} posts")
         if line_count < target * 0.5:
             print(f"  Warning: Only {line_count} posts collected (target was {target})")
+        update_status(task_id, 2, 'Data Scraping', 'completed',
+                      f'{line_count} unique posts collected', start_time,
+                      posts_collected=line_count, target_posts=target)
         return str(deduped_file)
     else:
+        update_status(task_id, 2, 'Data Scraping', 'error',
+                      'Deduped file not found after scraping', start_time)
         print("  Error: Deduped file not found after scraping")
         sys.exit(1)
 
 
-def phase3_analyze(plan: dict, deduped_file: str) -> str:
+def phase3_analyze(plan: dict, deduped_file: str, start_time: float = 0) -> str:
     """Phase 3: Quantitative Analysis — run the unified analyzer."""
     print()
     print("=" * 60)
@@ -188,6 +268,8 @@ def phase3_analyze(plan: dict, deduped_file: str) -> str:
     print("=" * 60)
 
     task_id = plan['task_id']
+    update_status(task_id, 3, 'Quantitative Analysis', 'running',
+                  'Running statistical analysis...', start_time)
     stats_file = DATA_ANALYZED / f"{task_id}_stats.json"
     focus = ','.join(plan.get('analysis_focus', []))
 
@@ -218,13 +300,17 @@ def phase3_analyze(plan: dict, deduped_file: str) -> str:
     process.wait()
 
     if not stats_file.exists():
+        update_status(task_id, 3, 'Quantitative Analysis', 'error',
+                      'Stats file not found after analysis', start_time)
         print("  Error: Stats file not found after analysis")
         sys.exit(1)
 
+    update_status(task_id, 3, 'Quantitative Analysis', 'completed',
+                  'Statistical analysis done', start_time)
     return str(stats_file)
 
 
-def phase4_report(plan: dict, stats_file: str) -> str:
+def phase4_report(plan: dict, stats_file: str, start_time: float = 0) -> str:
     """Phase 4: Report Generation — use LLM to write the final report."""
     print()
     print("=" * 60)
@@ -232,6 +318,8 @@ def phase4_report(plan: dict, stats_file: str) -> str:
     print("=" * 60)
 
     task_id = plan['task_id']
+    update_status(task_id, 4, 'Report Generation', 'running',
+                  'Calling Claude to generate report...', start_time)
     report_file = DATA_REPORTS / f"{task_id}_report.md"
 
     # Load stats
@@ -285,6 +373,9 @@ def phase4_report(plan: dict, stats_file: str) -> str:
     word_count = len(output)
     print(f"  Report saved: {report_file} ({word_count} chars)")
 
+    update_status(task_id, 4, 'Report Generation', 'completed',
+                  f'Report saved ({word_count} chars)', start_time,
+                  report_file=str(report_file))
     return str(report_file)
 
 
@@ -339,7 +430,8 @@ Examples:
             sys.exit(1)
 
         # Phase 1
-        plan = phase1_plan(task_description, task_id=args.task_id)
+        plan = phase1_plan(task_description, task_id=args.task_id,
+                           start_time=start_time)
         from_phase = 2  # Phase 1 done, continue from 2
 
     task_id = plan['task_id']
@@ -348,21 +440,21 @@ Examples:
 
     # Phase 2
     if from_phase <= 2:
-        deduped_file = phase2_scrape(plan)
+        deduped_file = phase2_scrape(plan, start_time=start_time)
 
     # Phase 3
     if from_phase <= 3:
         if not os.path.exists(deduped_file):
             print(f"Error: Deduped file not found: {deduped_file}")
             sys.exit(1)
-        stats_file = phase3_analyze(plan, deduped_file)
+        stats_file = phase3_analyze(plan, deduped_file, start_time=start_time)
 
     # Phase 4
     if from_phase <= 4:
         if not os.path.exists(stats_file):
             print(f"Error: Stats file not found: {stats_file}")
             sys.exit(1)
-        report_file = phase4_report(plan, stats_file)
+        report_file = phase4_report(plan, stats_file, start_time=start_time)
 
     # Summary
     elapsed = time.time() - start_time
@@ -378,7 +470,12 @@ Examples:
     print(f"  Data:     data/raw/{task_id}_deduped.jsonl")
     print(f"  Stats:    data/analyzed/{task_id}_stats.json")
     print(f"  Report:   data/reports/{task_id}_report.md")
+    print(f"  Status:   data/raw/{task_id}_status.json")
     print(f"  Time:     {minutes}m {seconds}s")
+
+    update_status(task_id, 4, 'Done', 'done',
+                  f'All phases completed in {minutes}m {seconds}s', start_time,
+                  report_file=f'data/reports/{task_id}_report.md')
 
 
 if __name__ == '__main__':
