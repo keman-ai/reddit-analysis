@@ -32,9 +32,12 @@
    - extended：间接相关的扩展社区（3-10 个）
    - 只选英文 subreddit（Reddit 主要是英文社区）
 
-2. **关键词生成**：生成 10-20 个搜索关键词
-   - 覆盖：产品/工具名、需求表达、痛点描述、替代方案
-   - 每个关键词 2-4 个英文单词，不要太长
+2. **关键词生成**：生成 20-40 个搜索关键词，宁多勿少
+   - 搜索是 all-words-present 匹配（关键词里每个词都出现即命中，不要求连续）
+   - 所以关键词应该拆成核心词组合，1-3 个词为主，不要写长短语
+   - 例如："Copilot"、"AI code"、"coding assistant"、"vibe coding"，而不是 "best AI coding assistant for Python"
+   - 覆盖：产品名（每个产品单独一个词条）、需求表达、痛点、替代方案、行业术语
+   - 包含该领域的知名产品/品牌名作为单独关键词（如 Copilot、Cursor、Devin、Replit 等）
    - 分组：按语义归类（如 product、demand、pain_point、alternative）
 
 3. **数据量估算**：

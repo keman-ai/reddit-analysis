@@ -16,14 +16,32 @@ import re
 CORPUS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'corpus')
 
 
+def _keyword_matches(text_lower, keyword_lower):
+    """Check if a keyword matches text.
+
+    Strategy:
+    - Single word keyword: simple substring match
+    - Multi-word keyword: ALL words must appear in text (order-independent)
+    This catches "Copilot vs Cursor" matching text with "switched from Copilot to Cursor"
+    """
+    words = keyword_lower.split()
+    if len(words) == 1:
+        return words[0] in text_lower
+    return all(w in text_lower for w in words)
+
+
 def search_subreddit(corpus_file, keywords):
     """Scan a corpus JSONL file, return posts matching any keyword.
 
     Match is case-insensitive on title + selftext.
+    Multi-word keywords use all-words-present matching (not exact substring).
     Each post is returned at most once, tagged with the first matching keyword.
     """
     matched = []
     seen_ids = set()
+
+    # Pre-process keywords
+    kw_list = [(kw_term, kw_group, kw_term.lower()) for kw_term, kw_group in keywords]
 
     with open(corpus_file, 'r') as f:
         for line in f:
@@ -41,8 +59,8 @@ def search_subreddit(corpus_file, keywords):
 
             text = (post.get('title', '') + ' ' + post.get('selftext', '')).lower()
 
-            for kw_term, kw_group in keywords:
-                if kw_term.lower() in text:
+            for kw_term, kw_group, kw_lower in kw_list:
+                if _keyword_matches(text, kw_lower):
                     post['search_keyword'] = kw_term
                     post['keyword_group'] = kw_group
                     matched.append(post)
