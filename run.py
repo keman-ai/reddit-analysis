@@ -81,6 +81,26 @@ def update_status(task_id: str, phase: int, phase_name: str, status: str,
     return _status_file
 
 
+def _find_claude_bin():
+    """Find claude CLI binary, checking common locations."""
+    import shutil
+    path = shutil.which('claude')
+    if path:
+        return path
+    # Common install locations
+    for candidate in [
+        os.path.expanduser('~/.local/bin/claude'),
+        '/usr/local/bin/claude',
+        os.path.expanduser('~/.npm-global/bin/claude'),
+    ]:
+        if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            return candidate
+    return 'claude'  # fallback, let it fail with FileNotFoundError
+
+
+CLAUDE_BIN = _find_claude_bin()
+
+
 def call_claude(prompt: str, timeout: int = 300) -> str:
     """Call Claude CLI with a prompt and return the output.
 
@@ -88,7 +108,7 @@ def call_claude(prompt: str, timeout: int = 300) -> str:
     """
     try:
         result = subprocess.run(
-            ['claude', '-p', '--allowedTools', '',
+            [CLAUDE_BIN, '-p', '--allowedTools', '',
              '--system-prompt', '你是一个文本生成助手。直接输出用户要求的内容，不要使用任何工具，不要请求权限，不要输出摘要。'],
             input=prompt,
             capture_output=True,
