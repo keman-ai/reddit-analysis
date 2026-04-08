@@ -1,7 +1,10 @@
-# 市场调研 & 商业分析 Corpus Subreddits
-# 目标用户：数据分析师、商业分析师、产品经理、学术研究者
+# 市场调研全领域 Corpus Subreddits (~300)
+# 目标：百万级数据，覆盖商业/科技/职场/教育/消费/生活全领域
+# 时间窗口：2 年
 
-# === 商业 & 创业 ===
+# ============================================================
+# 一、商业 & 创业 (30)
+# ============================================================
 Entrepreneur
 startups
 smallbusiness
@@ -11,14 +14,50 @@ indiehackers
 microsaas
 dropship
 sweatystartup
+juststart
+EntrepreneurRideAlong
+growmybusiness
+Startup_Ideas
+ecommerceguru
+FulfillmentByAmazon
+AmazonSeller
+shopify
+etsy
+WooCommerce
+stripe
+digitalnomad
+sidehustle
+passive_income
+BeermoneyCrypto
+beermoney
+flipping
+Reselling
+thrifting
+antiwork
+overemployed
 
-# === 产品 & 用户体验 ===
+# ============================================================
+# 二、产品 & 设计 (15)
+# ============================================================
 ProductManagement
 productdesign
 UXDesign
 userexperience
+UXResearch
+UI_Design
+web_design
+graphic_design
+Design
+IndustrialDesign
+InteractionDesign
+Figma
+webflow
+NoCode
+lowcode
 
-# === 数据分析 & BI ===
+# ============================================================
+# 三、数据 & 分析 (25)
+# ============================================================
 datascience
 dataanalysis
 analytics
@@ -28,8 +67,26 @@ PowerBI
 excel
 GoogleSheets
 learnmachinelearning
+dataengineering
+statistics
+rstats
+AskStatistics
+SQL
+bigdata
+datasets
+visualization
+dataisbeautiful
+Kaggle
+MLQuestions
+deeplearning
+computervision
+LanguageTechnology
+bioinformatics
+actuarial
 
-# === 营销 & 增长 ===
+# ============================================================
+# 四、营销 & 增长 (25)
+# ============================================================
 marketing
 digital_marketing
 SEO
@@ -38,8 +95,27 @@ content_marketing
 copywriting
 PPC
 GrowthHacking
+emailmarketing
+Affiliatemarketing
+juststart
+blogging
+content_creation
+influencermarketing
+adops
+analytics
+SocialMediaMarketing
+FacebookAds
+GoogleAds
+TikTokMarketing
+InstagramMarketing
+LinkedInMarketing
+Branding
+PublicRelations
+MarketResearch
 
-# === AI & 自动化 ===
+# ============================================================
+# 五、AI & 自动化 (30)
+# ============================================================
 artificial
 ChatGPT
 LocalLLaMA
@@ -48,8 +124,76 @@ AItools
 OpenAI
 ClaudeAI
 automation
+singularity
+StableDiffusion
+Bard
+midjourney
+ChatGPTCoding
+PromptEngineering
+ArtificialIntelligence
+GPT3
+langchain
+LLMDevs
+AutoGPT
+AgentAI
+comfyui
+sdforall
+aiwars
+ArtificialSentience
+MachineLearningTrade
+MLOps
+neuralnetworks
+reinforcementlearning
+robotics
+computervision
 
-# === 职场 & 求职 ===
+# ============================================================
+# 六、编程 & 技术 (40)
+# ============================================================
+learnprogramming
+programming
+webdev
+javascript
+reactjs
+nextjs
+node
+Python
+django
+flask
+golang
+rust
+java
+csharp
+dotnet
+swift
+kotlin
+flutter
+AndroidDev
+iOSDevelopment
+devops
+aws
+azure
+kubernetes
+docker
+sysadmin
+linux
+homelab
+selfhosted
+cybersecurity
+netsec
+gamedev
+Unity3D
+unrealengine
+databases
+PostgreSQL
+mongodb
+redis
+GraphQL
+APIDesign
+
+# ============================================================
+# 七、职场 & 求职 (25)
+# ============================================================
 careerguidance
 cscareerquestions
 jobs
@@ -57,15 +201,57 @@ resumes
 consulting
 FinancialCareers
 dataengineering
+ExperiencedDevs
+ITCareerQuestions
+recruitinghell
+careerchange
+workreform
+layoffs
+interviews
+negotiation
+humanresources
+recruiting
+sales
+InsideSales
+projectmanagement
+Agile
+scrum
+remotework
+WorkOnline
+freelance
 
-# === 个人财务 & 理财 ===
+# ============================================================
+# 八、金融 & 理财 (25)
+# ============================================================
 personalfinance
 FinancialPlanning
 povertyfinance
 investing
 Fire
+fatFIRE
+leanfire
+wallstreetbets
+stocks
+options
+CryptoCurrency
+Bitcoin
+RealEstate
+realestateinvesting
+Accounting
+tax
+Insurance
+CreditCards
+StudentLoans
+UKPersonalFinance
+AusFinance
+eupersonalfinance
+Bogleheads
+dividends
+ValueInvesting
 
-# === 学术 & 教育 ===
+# ============================================================
+# 九、学术 & 教育 (25)
+# ============================================================
 GradSchool
 AskAcademia
 college
@@ -73,23 +259,136 @@ PhD
 HomeworkHelp
 learnprogramming
 languagelearning
+Teachers
+teaching
+education
+OnlineEducation
+edtech
+IELTS
+GRE
+GMAT
+SAT
+Professors
+highereducation
+studytips
+GetStudying
+ADHD
+productivity
+selfimprovement
+DecidingToBeBetter
+IWantToLearn
 
-# === 写作 & 内容 ===
+# ============================================================
+# 十、写作 & 内容创作 (15)
+# ============================================================
 writing
 freelanceWriters
 selfpublish
 screenwriting
 technicalwriting
+blogging
+Journalism
+podcasting
+youtubers
+NewTubers
+Twitch
+streaming
+ContentCreation
+KindlePublishing
+WritingPrompts
 
-# === 生活服务 & 需求 ===
+# ============================================================
+# 十一、消费 & 生活方式 (25)
+# ============================================================
+BuyItForLife
+Frugal
+deals
+shutupandtakemymoney
+gadgets
+Android
+apple
+iphone
+buildapc
+HomeImprovement
+DIY
+Cooking
+MealPrepSunday
+EatCheapAndHealthy
+Fitness
+running
+loseit
+SkincareAddiction
+MakeupAddiction
+femalefashionadvice
+malefashionadvice
+travel
+solotravel
+photography
+videography
+
+# ============================================================
+# 十二、生活服务 & 求助 (20)
+# ============================================================
 Advice
 NoStupidQuestions
 needadvice
 LifeProTips
+legaladvice
+relationship_advice
+internetparents
+TooAfraidToAsk
+explainlikeimfive
+OutOfTheLoop
+AskMen
+AskWomen
+parenting
+Adulting
+movingday
+moving
+Insurance
+HomeOwners
+Landlord
+tenants
 
-# === 自由职业 & 服务市场 ===
+# ============================================================
+# 十三、自由职业 & 服务市场 (10)
+# ============================================================
 forhire
-freelance
 slavelabour
 remotejobs
+Upwork
+freelance_forhire
+VirtualAssistant
+transcription
 WorkOnline
+beermoney
+sidehustle
+
+# ============================================================
+# 十四、行业垂直 (25)
+# ============================================================
+healthcare
+nursing
+medicine
+pharmacy
+LawFirm
+LawSchool
+architecture
+engineering
+civilengineering
+MechanicalEngineering
+ElectricalEngineering
+ChemicalEngineering
+supplychain
+logistics
+Manufacturing
+Construction
+Truckers
+RealEstateAgent
+InsuranceAgent
+Salesforce
+CRM
+Zendesk
+CustomerSuccess
+TechSupport
+MSP

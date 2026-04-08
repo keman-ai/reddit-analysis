@@ -71,14 +71,15 @@ def build_subreddit(subreddit, months=6, max_pages=50):
     print(f"\n  Building corpus for r/{subreddit} (existing: {initial_count})")
     total_new = 0
 
-    # Use multiple sort orders to maximize coverage
-    # - new: chronological, gets recent posts
-    # - top (year/month): gets high-value posts
-    # - hot: gets currently active posts
+    # Use multiple sort orders + time filters to maximize coverage
+    # Reddit limits pagination to ~1000 per sort, so we use multiple combos
     sorts = [
-        ('new', time_filter, max_pages),
-        ('top', time_filter, max_pages),
-        ('hot', time_filter, min(max_pages, 10)),
+        ('new', 'all', max_pages),       # Most recent posts (chronological)
+        ('top', 'all', max_pages),       # All-time top posts
+        ('top', 'year', max_pages),      # Past year top
+        ('top', 'month', max_pages),     # Past month top
+        ('hot', 'all', min(max_pages, 10)),  # Currently active
+        ('rising', 'all', 5),            # Up-and-coming
     ]
 
     for sort, tf, pages in sorts:
