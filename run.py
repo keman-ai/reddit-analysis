@@ -114,7 +114,7 @@ def call_claude(prompt: str, timeout: int = 300) -> str:
             capture_output=True,
             text=True,
             timeout=timeout,
-            cwd=str(PROJECT_ROOT),
+            cwd='/tmp',  # Avoid loading CLAUDE.md which conflicts with our prompts
         )
         if result.returncode != 0 and result.stderr:
             print(f"  Claude CLI warning: {result.stderr[:200]}", file=sys.stderr)
@@ -123,8 +123,12 @@ def call_claude(prompt: str, timeout: int = 300) -> str:
         print("Error: Claude CLI not found. Please install Claude Code and ensure 'claude' is in PATH.",
               file=sys.stderr)
         sys.exit(1)
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as e:
         print(f"Error: Claude CLI timed out after {timeout}s", file=sys.stderr)
+        if e.stdout:
+            print(f"  Partial stdout: {e.stdout[:200]}", file=sys.stderr)
+        if e.stderr:
+            print(f"  Partial stderr: {e.stderr[:200]}", file=sys.stderr)
         return ""
 
 
