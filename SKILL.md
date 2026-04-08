@@ -36,14 +36,18 @@ python run.py --task-id ai_writing_20260408 "AI writing tools market demand"
 | `--task-id` | 自定义任务 ID（默认由 LLM 生成） | `--task-id my_task_20260408` |
 | `--resume TASK_ID` | 恢复之前中断的任务 | `--resume ai_writing_20260408` |
 | `--from-phase N` | 从第 N 阶段开始（需配合 --resume） | `--from-phase 3` |
+| `--online` | 使用在线抓取模式（跳过 corpus 检索） | `--online` |
 
 ## 执行流程
 
 ```
 Phase 1: 任务规划    → LLM 生成搜索计划（subreddit + 关键词 + 数据量）
-Phase 2: 数据抓取    → Python 脚本调 Reddit JSON API，断点续抓
+Phase 2: Corpus 检索  → 从本地历史库按关键词匹配帖子（秒级）
 Phase 3: 定量分析    → Python 脚本做统计（分布、热度、价格、分类）
 Phase 4: 报告生成    → LLM 基于统计数据 + 高热帖子生成中文报告
+
+如果使用 --online 模式：
+Phase 2: 在线抓取    → Python 脚本调 Reddit JSON API，断点续抓（分钟级）
 ```
 
 ## 输出文件
@@ -100,6 +104,50 @@ cat data/raw/ai_writing_20260408_status.json
 status 字段值：`running`（进行中）、`completed`（当前阶段完成）、`done`（全部完成）、`error`（出错）。
 
 在 Claude Code 会话中，可以让 agent 定期读取此文件来汇报进度。
+
+## Corpus 历史库管理
+
+默认模式下，工具从本地 corpus 检索帖子（秒级），不做在线抓取。需要先构建 corpus。
+
+### 初始化 corpus（一次性）
+
+```bash
+# 灌入指定 subreddit 的最近 12 个月帖子
+python scripts/corpus_build.py --subreddits personalfinance,writing,worldnews
+
+# 从文件批量灌入
+python scripts/corpus_build.py --list config/corpus_subreddits.txt
+
+# 指定月份数
+python scripts/corpus_build.py --subreddits politics --months 6
+```
+
+### 增量更新（每日/每周）
+
+```bash
+# 更新所有已有 corpus（最近 7 天）
+python scripts/corpus_update.py
+
+# 只更新指定 subreddit
+python scripts/corpus_update.py --subreddits politics,worldnews
+
+# 更新最近 3 天
+python scripts/corpus_update.py --days 3
+```
+
+### 查看 corpus 状态
+
+```bash
+cat data/corpus/_meta.json
+```
+
+### 在线抓取模式
+
+如果不想维护 corpus，可以用 `--online` 回退到旧的在线抓取模式：
+
+```bash
+python run.py --online "调研 AI 写作工具"
+```
 
 ## 常见问题
 
