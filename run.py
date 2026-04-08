@@ -22,6 +22,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 DATA_RAW = PROJECT_ROOT / 'data' / 'raw'
 DATA_ANALYZED = PROJECT_ROOT / 'data' / 'analyzed'
 DATA_REPORTS = PROJECT_ROOT / 'data' / 'reports'
+DATA_CORPUS = PROJECT_ROOT / 'data' / 'corpus'
 PROMPTS_DIR = PROJECT_ROOT / 'prompts'
 
 # Global reference to the current status file path, set once task_id is known
@@ -30,7 +31,7 @@ _status_file = None
 
 def ensure_dirs():
     """Ensure all required directories exist."""
-    for d in [DATA_RAW, DATA_ANALYZED, DATA_REPORTS]:
+    for d in [DATA_RAW, DATA_ANALYZED, DATA_REPORTS, DATA_CORPUS]:
         d.mkdir(parents=True, exist_ok=True)
 
 
@@ -68,7 +69,7 @@ def update_status(task_id: str, phase: int, phase_name: str, status: str,
         'updated_at': datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
         'phases': {
             1: 'Task Planning',
-            2: 'Data Scraping',
+            2: 'Corpus Search',
             3: 'Quantitative Analysis',
             4: 'Report Generation',
         },
@@ -176,6 +177,52 @@ def phase1_plan(task_description: str, task_id: str = None,
                   start_time)
 
     return plan
+
+
+def phase2_search(plan: dict, start_time: float = 0) -> str:
+    """Phase 2: Search local corpus for matching posts."""
+    print()
+    print("=" * 60)
+    print("Phase 2: Corpus Search")
+    print("=" * 60)
+
+    task_id = plan['task_id']
+    matched_file = DATA_RAW / f"{task_id}_matched.jsonl"
+
+    update_status(task_id, 2, 'Corpus Search', 'running',
+                  'Searching local corpus...', start_time)
+
+    search_cmd = [
+        sys.executable, str(PROJECT_ROOT / 'scripts' / 'search_corpus.py'),
+        '--plan', str(DATA_RAW / f"{task_id}_plan.json"),
+        '--output', str(matched_file),
+    ]
+
+    process = subprocess.Popen(
+        search_cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        cwd=str(PROJECT_ROOT),
+    )
+
+    for line in iter(process.stdout.readline, ''):
+        print(f"  {line}", end='')
+    process.wait()
+
+    if not matched_file.exists() or matched_file.stat().st_size == 0:
+        print("  Warning: No matching posts found in corpus.")
+        print("  Hint: Build corpus first with: python scripts/corpus_build.py --subreddits <subs>")
+        print("  Or use --online flag to scrape directly.")
+        matched_file.touch()
+
+    line_count = sum(1 for line in open(matched_file) if line.strip()) if matched_file.exists() else 0
+    print(f"\n  Matched posts: {line_count}")
+
+    update_status(task_id, 2, 'Corpus Search', 'completed',
+                  f'{line_count} posts matched from corpus', start_time,
+                  posts_matched=line_count)
+    return str(matched_file)
 
 
 def phase2_scrape(plan: dict, start_time: float = 0) -> str:
@@ -406,6 +453,8 @@ Examples:
     parser.add_argument('--resume', metavar='TASK_ID', help='Resume a previous task by ID')
     parser.add_argument('--from-phase', type=int, choices=[1, 2, 3, 4], default=1,
                         help='Start from a specific phase (default: 1)')
+    parser.add_argument('--online', action='store_true',
+                        help='Use online scraping instead of local corpus search')
 
     args = parser.parse_args()
 
@@ -444,19 +493,26 @@ Examples:
         from_phase = 2  # Phase 1 done, continue from 2
 
     task_id = plan['task_id']
-    deduped_file = str(DATA_RAW / f"{task_id}_deduped.jsonl")
     stats_file = str(DATA_ANALYZED / f"{task_id}_stats.json")
 
     # Phase 2
     if from_phase <= 2:
-        deduped_file = phase2_scrape(plan, start_time=start_time)
+        if args.online:
+            data_file = phase2_scrape(plan, start_time=start_time)
+        else:
+            data_file = phase2_search(plan, start_time=start_time)
+    else:
+        # When resuming from phase 3+, try matched file first, then deduped
+        matched = str(DATA_RAW / f"{task_id}_matched.jsonl")
+        deduped = str(DATA_RAW / f"{task_id}_deduped.jsonl")
+        data_file = matched if os.path.exists(matched) else deduped
 
     # Phase 3
     if from_phase <= 3:
-        if not os.path.exists(deduped_file):
-            print(f"Error: Deduped file not found: {deduped_file}")
+        if not os.path.exists(data_file):
+            print(f"Error: Data file not found: {data_file}")
             sys.exit(1)
-        stats_file = phase3_analyze(plan, deduped_file, start_time=start_time)
+        stats_file = phase3_analyze(plan, data_file, start_time=start_time)
 
     # Phase 4
     if from_phase <= 4:
@@ -476,7 +532,7 @@ Examples:
     print("=" * 60)
     print(f"  Task ID:  {task_id}")
     print(f"  Plan:     data/raw/{task_id}_plan.json")
-    print(f"  Data:     data/raw/{task_id}_deduped.jsonl")
+    print(f"  Data:     {os.path.relpath(data_file, PROJECT_ROOT)}")
     print(f"  Stats:    data/analyzed/{task_id}_stats.json")
     print(f"  Report:   data/reports/{task_id}_report.md")
     print(f"  Status:   data/raw/{task_id}_status.json")
