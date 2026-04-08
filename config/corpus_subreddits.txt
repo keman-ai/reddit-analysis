@@ -1,0 +1,95 @@
+# 市场调研 & 商业分析 Corpus Subreddits
+# 目标用户：数据分析师、商业分析师、产品经理、学术研究者
+
+# === 商业 & 创业 ===
+Entrepreneur
+startups
+smallbusiness
+SaaS
+ecommerce
+indiehackers
+microsaas
+dropship
+sweatystartup
+
+# === 产品 & 用户体验 ===
+ProductManagement
+productdesign
+UXDesign
+userexperience
+
+# === 数据分析 & BI ===
+datascience
+dataanalysis
+analytics
+BusinessIntelligence
+tableau
+PowerBI
+excel
+GoogleSheets
+learnmachinelearning
+
+# === 营销 & 增长 ===
+marketing
+digital_marketing
+SEO
+socialmedia
+content_marketing
+copywriting
+PPC
+GrowthHacking
+
+# === AI & 自动化 ===
+artificial
+ChatGPT
+LocalLLaMA
+MachineLearning
+AItools
+OpenAI
+ClaudeAI
+automation
+
+# === 职场 & 求职 ===
+careerguidance
+cscareerquestions
+jobs
+resumes
+consulting
+FinancialCareers
+dataengineering
+
+# === 个人财务 & 理财 ===
+personalfinance
+FinancialPlanning
+povertyfinance
+investing
+Fire
+
+# === 学术 & 教育 ===
+GradSchool
+AskAcademia
+college
+PhD
+HomeworkHelp
+learnprogramming
+languagelearning
+
+# === 写作 & 内容 ===
+writing
+freelanceWriters
+selfpublish
+screenwriting
+technicalwriting
+
+# === 生活服务 & 需求 ===
+Advice
+NoStupidQuestions
+needadvice
+LifeProTips
+
+# === 自由职业 & 服务市场 ===
+forhire
+freelance
+slavelabour
+remotejobs
+WorkOnline
