@@ -25,10 +25,32 @@ META_FILE = os.path.join(CORPUS_DIR, '_meta.json')
 
 CONSECUTIVE_EMPTY_THRESHOLD = 5
 
-# Generic high-frequency search terms to get broad coverage
+# Broad search terms for market research corpus coverage
 GENERIC_KEYWORDS = [
+    # General high-frequency
     '', 'help', 'best', 'recommend', 'how to', 'need', 'looking for',
     'advice', 'question', 'what', 'anyone', 'experience',
+    # Demand & pain points
+    'frustrated', 'alternative', 'switched from', 'better than',
+    'hate', 'love', 'wish', 'struggle', 'problem', 'issue',
+    # Product & tools
+    'tool', 'app', 'software', 'platform', 'service', 'review',
+    'comparison', 'vs', 'pricing', 'free', 'paid', 'subscription',
+    # Business & market
+    'market', 'competitor', 'startup', 'business', 'revenue', 'cost',
+    'budget', 'ROI', 'growth', 'strategy', 'trend',
+    # AI & automation
+    'AI', 'GPT', 'Claude', 'automation', 'chatbot', 'agent',
+    'machine learning', 'workflow', 'productivity',
+    # Career & work
+    'career', 'salary', 'interview', 'hire', 'remote', 'freelance',
+    'job', 'resume', 'portfolio', 'skill',
+    # Learning & education
+    'course', 'learn', 'tutorial', 'beginner', 'certification',
+    'bootcamp', 'degree', 'self-taught', 'resource',
+    # Data & analysis
+    'data', 'analysis', 'report', 'dashboard', 'visualization',
+    'spreadsheet', 'database', 'SQL', 'Python', 'Excel',
 ]
 
 
