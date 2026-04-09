@@ -72,6 +72,7 @@ def update_status(task_id: str, phase: int, phase_name: str, status: str,
             2: 'Corpus Search',
             3: 'Quantitative Analysis',
             4: 'Report Generation',
+            5: 'PDF Conversion',
         },
     }
     payload.update(extra)
@@ -459,6 +460,42 @@ def phase4_report(plan: dict, stats_file: str, start_time: float = 0) -> str:
     return str(report_file)
 
 
+def phase5_pdf(report_file: str, task_id: str, start_time: float = 0) -> str:
+    """Phase 5: PDF Conversion — convert Markdown report to PDF."""
+    print()
+    print("=" * 60)
+    print("Phase 5: PDF Conversion")
+    print("=" * 60)
+
+    update_status(task_id, 5, 'PDF Conversion', 'running',
+                  'Converting report to PDF...', start_time)
+
+    pdf_file = str(Path(report_file).with_suffix('.pdf'))
+
+    pdf_cmd = [
+        sys.executable, str(PROJECT_ROOT / 'scripts' / 'md2pdf.py'),
+        report_file, '-o', pdf_file,
+    ]
+
+    result = subprocess.run(pdf_cmd, capture_output=True, text=True,
+                            cwd=str(PROJECT_ROOT))
+
+    for line in result.stdout.strip().splitlines():
+        print(f"  {line}")
+
+    if result.returncode != 0:
+        print(f"  Warning: PDF conversion failed: {result.stderr[:300]}")
+        print(f"  Markdown report is still available at: {report_file}")
+        update_status(task_id, 5, 'PDF Conversion', 'error',
+                      f'PDF conversion failed: {result.stderr[:200]}', start_time)
+        return report_file
+
+    update_status(task_id, 5, 'PDF Conversion', 'completed',
+                  f'PDF saved: {pdf_file}', start_time,
+                  pdf_file=pdf_file)
+    return pdf_file
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Reddit 市场调研自动化 CLI 工具',
@@ -473,14 +510,22 @@ Examples:
         """)
 
     parser.add_argument('task', nargs='?', help='Task description')
+    parser.add_argument('--check', action='store_true',
+                        help='Check environment and dependencies')
     parser.add_argument('--task-id', help='Override auto-generated task ID')
     parser.add_argument('--resume', metavar='TASK_ID', help='Resume a previous task by ID')
-    parser.add_argument('--from-phase', type=int, choices=[1, 2, 3, 4], default=1,
+    parser.add_argument('--from-phase', type=int, choices=[1, 2, 3, 4, 5], default=1,
                         help='Start from a specific phase (default: 1)')
     parser.add_argument('--online', action='store_true',
                         help='Use online scraping instead of local corpus search')
+    parser.add_argument('--no-pdf', action='store_true',
+                        help='Skip PDF conversion (output Markdown only)')
 
     args = parser.parse_args()
+
+    if args.check:
+        from scripts.check_env import main as check_main
+        sys.exit(check_main())
 
     if not args.task and not args.resume:
         parser.print_help()
@@ -544,6 +589,16 @@ Examples:
             print(f"Error: Stats file not found: {stats_file}")
             sys.exit(1)
         report_file = phase4_report(plan, stats_file, start_time=start_time)
+    else:
+        report_file = str(DATA_REPORTS / f"{task_id}_report.md")
+
+    # Phase 5: PDF
+    pdf_file = None
+    if from_phase <= 5 and not args.no_pdf:
+        if not os.path.exists(report_file):
+            print(f"Error: Report file not found: {report_file}")
+            sys.exit(1)
+        pdf_file = phase5_pdf(report_file, task_id, start_time=start_time)
 
     # Summary
     elapsed = time.time() - start_time
@@ -558,13 +613,17 @@ Examples:
     print(f"  Plan:     data/raw/{task_id}_plan.json")
     print(f"  Data:     {os.path.relpath(data_file, PROJECT_ROOT)}")
     print(f"  Stats:    data/analyzed/{task_id}_stats.json")
-    print(f"  Report:   data/reports/{task_id}_report.md")
+    print(f"  Report:   {report_file}")
+    if pdf_file and pdf_file.endswith('.pdf'):
+        print(f"  PDF:      {pdf_file}")
     print(f"  Status:   data/raw/{task_id}_status.json")
     print(f"  Time:     {minutes}m {seconds}s")
 
-    update_status(task_id, 4, 'Done', 'done',
+    final_output = pdf_file if (pdf_file and pdf_file.endswith('.pdf')) else report_file
+    update_status(task_id, 5, 'Done', 'done',
                   f'All phases completed in {minutes}m {seconds}s', start_time,
-                  report_file=f'data/reports/{task_id}_report.md')
+                  report_file=report_file,
+                  pdf_file=pdf_file if pdf_file and pdf_file.endswith('.pdf') else None)
 
 
 if __name__ == '__main__':
