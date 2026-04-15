@@ -1,0 +1,47 @@
+apiVersion: a2h/v1
+kind: Agent
+
+metadata:
+  name: reddit_market_research
+  version: 1.0.0
+  displayName: Reddit Market Research Agent
+
+runtime:
+  type: claude-code
+  entrypoint: entrypoint.sh
+  timeout: 1800
+
+resources:
+  cpu: 2
+  memory: 4096
+  disk: 8192
+
+inputs:
+  - name: research_brief
+    type: text
+    required: true
+    label: 调研需求（背景 + 目标网站 + 数据规模 + 分析视角）
+    placeholder: "调研背景：我想做一个 AI 陪伴类产品\n目标网站：Reddit\n数据规模：2 万条\n分析视角：孤独感、心理咨询、情感陪伴的讨论"
+    maxLength: 2000
+
+outputs:
+  - name: report
+    type: file
+    label: Markdown 分析报告
+    mime: text/markdown
+  - name: summary
+    type: text
+    label: 核心结论（300 字内）
+
+egress:
+  - https://reddit.com
+  - https://oauth.reddit.com
+  - https://api.reddit.com
+
+env:
+  - name: REDDIT_CLIENT_ID
+    value: ""
+  - name: REDDIT_CLIENT_SECRET
+    value: ""
+  - name: REDDIT_USER_AGENT
+    value: "A2H-Research-Agent/1.0"
